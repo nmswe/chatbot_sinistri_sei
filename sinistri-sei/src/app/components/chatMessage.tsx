@@ -2,7 +2,7 @@ import { ChatMessageProps } from "../types/chat";
 
 export default function ChatMessage({ message }: ChatMessageProps) {
     return (
-        <div className={`flex relative ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+        <div className={`flex relative pb-3 last:pb-0 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
                 className={`px-4 py-2 rounded-xl max-w-[70%] text-sm text-gray-800 break-words whitespace-normal ${
                     message.role === 'user'
