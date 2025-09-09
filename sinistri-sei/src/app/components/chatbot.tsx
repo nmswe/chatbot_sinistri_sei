@@ -2,44 +2,42 @@
 
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import ChatHeader from './chatHeader';
+import ChatMessages from './chatMessages';
+import ChatInput from './chatInput';
+import { ChatMessage } from '../types/chat';
 
-export default function Page() {
+export default function ChatBot() {
     const { messages, sendMessage, status } = useChat({
         transport: new DefaultChatTransport({
-        api: '/api/chat',
+            api: '/api/chat',
         }),
     });
-    const [input, setInput] = useState('');
+
+    const [input, setInput] = useState<string>('');
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages, status]);
 
     return (
-        <div className='flex flex-col'>
-            {messages.map(message => (
-                <div key={message.id}>
-                    {message.role === 'user' ? 'User: ' : 'AI: '}
-                        {message.parts.map((part, index) =>
-                            part.type === 'text' ? <span key={index}>{part.text}</span> : null,
-                        )}
-                </div>
-            ))}
-            <form
-                onSubmit={e => {
-                    e.preventDefault();
-                    if (input.trim()) {
-                        sendMessage({ text: input });
-                        setInput('');
-                    }}
-                }>
-                <input
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
-                    disabled={status !== 'ready'}
-                    placeholder="Say something..."
-                />
-                <button type="submit" disabled={status !== 'ready'}>
-                    Submit
-                </button>
-            </form>
+        <div className="w-full max-w-[600px] h-[650px] bg-white rounded-xl flex flex-col overflow-hidden">
+            <ChatHeader />
+
+            <ChatMessages
+                messages={messages as ChatMessage[]}
+                status={status}
+                messagesEndRef={messagesEndRef}
+            />
+            
+            <ChatInput
+                input={input}
+                setInput={setInput}
+                sendMessage={sendMessage}
+                status={status}
+            />
         </div>
     );
 }
