@@ -16,7 +16,6 @@ export async function POST(req: Request) {
 
     if (isVillainDefeated(lastModelMessage)) {
         currentVillainIndex = (currentVillainIndex + 1) % VillainArray.length;
-        messages = [];
     }
 
     const currentVillain = VillainArray[currentVillainIndex];
