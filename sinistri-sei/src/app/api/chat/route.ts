@@ -6,7 +6,7 @@ import { isVillainDefeated } from '../../../../lib/VillainService';
 let currentVillainIndex = 0;
 
 export async function POST(req: Request) {
-    let { messages }: { messages: UIMessage[] } = await req.json();
+    const { messages }: { messages: UIMessage[] } = await req.json();
 
     const lastModelMessageObj = [...messages].reverse().find(m => m.role === 'assistant');
     const lastModelMessage = lastModelMessageObj?.parts
