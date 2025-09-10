@@ -4,7 +4,6 @@ import { VillainArray } from '../../../../lib/Villain';
 import { isVillainDefeated } from '../../../../lib/VillainService';
 
 let currentVillainIndex = 0;
-let rightAnswers = 0;
 
 export async function POST(req: Request) {
     let { messages }: { messages: UIMessage[] } = await req.json();
@@ -17,7 +16,6 @@ export async function POST(req: Request) {
 
     if (isVillainDefeated(lastModelMessage)) {
         currentVillainIndex = (currentVillainIndex + 1) % VillainArray.length;
-        rightAnswers = 0;
         messages = [];
     }
 
