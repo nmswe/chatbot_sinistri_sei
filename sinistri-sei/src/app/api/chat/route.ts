@@ -1,16 +1,13 @@
-import { google } from "@ai-sdk/google";
-import { convertToModelMessages, streamText, UIMessage } from "ai";
-import { VillainArray } from "../../../../lib/Villain";
-import { isVillainDefeated } from "../../../../lib/VillainService";
-
+import { google } from '@ai-sdk/google';
+import { convertToModelMessages, generateText, UIMessage } from 'ai';
+import { VillainArray } from '../../../../lib/Villain';
+import { isVillainDefeated } from '../../../../lib/VillainService';
 
 let currentVillainIndex = 0;
-let correctAnswersCount = 0;
-
-export const maxDuration = 30;
+let count = 0;
 
 export async function POST(req: Request) {
-    const { messages }: { messages: UIMessage[]} = await req.json();
+    const { messages }: { messages: UIMessage[] } = await req.json();
 
     const lastModelMessageObj = [...messages].reverse().find(m => m.role === 'assistant');
     const lastModelMessage = lastModelMessageObj?.parts
@@ -20,16 +17,29 @@ export async function POST(req: Request) {
 
     if (isVillainDefeated(lastModelMessage)) {
         currentVillainIndex = (currentVillainIndex + 1) % VillainArray.length;
-        correctAnswersCount = 0;
+        count = 0;
     }
 
     const currentVillain = VillainArray[currentVillainIndex];
-    
-    const result = streamText({
+
+    const { text } = await generateText({
         model: google('gemini-2.5-flash'),
         system: currentVillain.toPromptString(),
         messages: convertToModelMessages(messages),
     });
 
-    return result.toUIMessageStreamResponse();
+    const modelMessage: UIMessage = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        parts: [{ type: 'text', text }],
+    };
+
+    const result = new Response(JSON.stringify({
+        messages: [modelMessage],
+        index: currentVillainIndex,
+    }), {
+        headers: { 'Content-Type': 'application/json' },
+    });
+
+    return result
 }

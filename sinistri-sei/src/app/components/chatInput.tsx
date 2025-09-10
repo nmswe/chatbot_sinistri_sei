@@ -1,4 +1,4 @@
-import { ChatInputProps } from "../types/chat";
+import { ChatInputProps } from "../types/chatTypes/chat";
 import { useRef, useEffect } from "react";
 
 export default function ChatInput({ input, setInput, sendMessage, status }: ChatInputProps) {
