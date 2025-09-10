@@ -4,10 +4,10 @@ import { VillainArray } from '../../../../lib/Villain';
 import { isVillainDefeated } from '../../../../lib/VillainService';
 
 let currentVillainIndex = 0;
-let count = 0;
+let rightAnswers = 0;
 
 export async function POST(req: Request) {
-    const { messages }: { messages: UIMessage[] } = await req.json();
+    let { messages }: { messages: UIMessage[] } = await req.json();
 
     const lastModelMessageObj = [...messages].reverse().find(m => m.role === 'assistant');
     const lastModelMessage = lastModelMessageObj?.parts
@@ -17,7 +17,8 @@ export async function POST(req: Request) {
 
     if (isVillainDefeated(lastModelMessage)) {
         currentVillainIndex = (currentVillainIndex + 1) % VillainArray.length;
-        count = 0;
+        rightAnswers = 0;
+        messages = [];
     }
 
     const currentVillain = VillainArray[currentVillainIndex];
