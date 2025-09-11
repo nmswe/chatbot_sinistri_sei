@@ -16,6 +16,8 @@ export default function Home() {
       />
       <ChatBot />
       <Toaster position="bottom-center" />
+      */}
+      <Intro />
     </div>
   );
 }
