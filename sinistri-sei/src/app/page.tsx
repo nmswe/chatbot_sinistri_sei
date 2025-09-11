@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import ChatBot from "./components/chatbot";
 import Intro from "./components_intro/intro";
 import Image from "next/image";
@@ -14,8 +15,7 @@ export default function Home() {
         className="absolute top-5 left-5"
       />
       <ChatBot />
-      */}
-      <Intro />
+      <Toaster position="bottom-center" />
     </div>
   );
 }

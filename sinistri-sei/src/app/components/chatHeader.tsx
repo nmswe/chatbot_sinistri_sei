@@ -1,15 +1,7 @@
-import { VillainIndex } from "../types/chatTypes/chat";
+import { VillainState } from "../types/useChatTypes/useChat";
+import { sixSinisters } from "../utils/arrayVillains";
 
-const sixSinisters = [
-    { id: 1, src: '/villains/vulture.svg', alt: 'Vulture' },
-    { id: 2, src: '/villains/kraven.svg', alt: 'Kraven' },
-    { id: 3, src: '/villains/mysterio.svg', alt: 'Mysterio' },
-    { id: 4, src: '/villains/sandman.svg', alt: 'Sandman' },
-    { id: 5, src: '/villains/electro.svg', alt: 'Electro' },
-    { id: 6, src: '/villains/doc_ock.svg', alt: 'Doc Ock' },
-];
-
-export default function ChatHeader({ villainIndex }: VillainIndex) {
+export default function ChatHeader(villainState : VillainState) {
     return (
         <div className="py-3 px-1 flex justify-between border-b border-gray-200">
             {sixSinisters.map((s) => (
@@ -17,9 +9,9 @@ export default function ChatHeader({ villainIndex }: VillainIndex) {
                     <img
                         src={s.src}
                         alt={s.alt}
-                        className={`w-14 ${s.id - 1 === villainIndex ? 'border-2 rounded-md border-emerald-600' : ''}`}
+                        className={`w-14 ${s.id - 1 === villainState.currentIndex ? 'border-2 rounded-md border-emerald-600' : ''}`}
                     />
-                    {s.id - 1 < villainIndex && (
+                    {s.id - 1 < villainState.currentIndex && (
                         <>
                             <span className="absolute inset-0 flex items-center justify-center text-red-600 text-6xl font-bold pointer-events-none z-10">
                                 ✕

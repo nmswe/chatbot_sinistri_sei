@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { ChatStatus, Message, SendMessageParams } from "../types/useChatTypes/useChat";
+import { ChatStatus, Message, SendMessageParams, VillainState } from "../types/useChatTypes/useChat";
 
 function useChat() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [status, setStatus] = useState<ChatStatus>("ready");
-    const [villainIndex, setVillainIndex] = useState<number>(0);
+    const [villainState, setVillainState] = useState<VillainState>({ currentIndex: 0, defeatCounter: 0 });
 
     const sendMessage = async ({ text }: SendMessageParams) => {
         const userMessage: Message = {
@@ -22,15 +22,15 @@ function useChat() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ messages: [...messages, userMessage] }),
+                body: JSON.stringify({ messages: [...messages, userMessage], villainState }),
             });
 
             if (response.ok) {
                 setStatus("streaming");
-                const data: { messages: Message[]; index: number } = await response.json();
+                const data: { messages: Message[]; villainState: VillainState } = await response.json();
 
                 setMessages(prev => [...prev, ...data.messages]);
-                setVillainIndex(data.index);
+                setVillainState(data.villainState);
             }
         } catch (err) {
             console.error("Errore nella chiamata API", err);
@@ -40,7 +40,7 @@ function useChat() {
     };
 
 
-    return { messages, status, villainIndex, sendMessage };
+    return { messages, status, villainState, sendMessage };
 }
 
 export default useChat;
