@@ -8,7 +8,7 @@ import { ChatMessage } from '../types/chatTypes/chat';
 import useChat from '../hook/useChat';
 
 export default function ChatBot() {
-    const { messages, sendMessage, status, villainIndex } = useChat();
+    const { messages, sendMessage, status, villainState } = useChat();
     const [input, setInput] = useState<string>('');
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -18,7 +18,7 @@ export default function ChatBot() {
 
     return (
         <div className="w-full max-w-[600px] h-[650px] bg-white rounded-xl flex flex-col overflow-hidden relative">
-            <ChatHeader villainIndex={villainIndex} />
+            <ChatHeader {...villainState} />
 
             <ChatMessages
                 messages={messages as ChatMessage[]}

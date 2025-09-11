@@ -1,27 +1,26 @@
 import { google } from '@ai-sdk/google';
 import { convertToModelMessages, generateText, jsonSchema, tool, UIMessage } from 'ai';
-import { defeatVillain, getCurrentVillain, VillainState } from '../../../../lib/VillainService';
+import { defeatVillain, getCurrentVillain } from '../../../../lib/VillainService';
+import { VillainState } from '@/app/types/useChatTypes/useChat';
 
-export const defeatVillainTool = (state: VillainState) => tool({
+export const defeatVillainTool = (villainState: VillainState) => tool({
     description: 'Marks the current villain as defeated and advances to the next one.',
     inputSchema: jsonSchema({}),
     execute: async () => {
-        const { state: newState, currentVillain } = defeatVillain(state);
+        const { villainState: newState, currentVillain } = defeatVillain(villainState);
         return { state: newState, villain: currentVillain};
     },
 });
 
 export async function POST(req: Request) {
-    const { messages , state}: { messages: UIMessage[], state: VillainState } = await req.json();
-    console.log("Received state:", state);
-    const currentVillain = getCurrentVillain(state);
-    console.log("Current Villain:", currentVillain.name);
+    const { messages , villainState}: { messages: UIMessage[], villainState: VillainState } = await req.json();
+    const currentVillain = getCurrentVillain(villainState);
 
-    const { text, toolResults } = await generateText({
+    const { text } = await generateText({
         model: google('gemini-2.5-flash'),
         system: currentVillain.toPromptString(),
         messages: convertToModelMessages(messages),
-        tools: { defeatVillain: defeatVillainTool(state) },
+        tools: { defeatVillain: defeatVillainTool(villainState) },
     });
 
     const modelMessage: UIMessage = {
@@ -32,8 +31,7 @@ export async function POST(req: Request) {
 
     const result = new Response(JSON.stringify({
         messages: [modelMessage],
-        state,
-        toolResults,
+        villainState,
     }), {
         headers: { 'Content-Type': 'application/json' },
     });

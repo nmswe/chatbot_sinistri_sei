@@ -1,34 +1,26 @@
+import { VillainState } from '@/app/types/useChatTypes/useChat';
 import { Villain, VillainArray } from './Villain';
-export interface VillainState {
-   currentIndex: number;
-   defeatCounter:number;
-}
 
-export function defeatVillain(state: VillainState): {state: VillainState, currentVillain: Villain} {
+export function defeatVillain(villainState:VillainState): {villainState: VillainState, currentVillain: Villain} {
     //This tool is called by the model when it thinks the villain is defeated.
     //1. Increment the defeat counter
-    state.defeatCounter++;
+    villainState.defeatCounter++;
     //2. Set the current villain as defeated
-    VillainArray[state.currentIndex].defeated = true;
+    VillainArray[villainState.currentIndex].defeated = true;
     //3. Move to the next villain
-    const nextVillain = getNextVillain(state);
-    state.currentIndex = VillainArray.indexOf(nextVillain);
-    return {state, currentVillain: nextVillain};
+    const nextVillain = getNextVillain(villainState);
+    villainState.currentIndex = VillainArray.indexOf(nextVillain);
+    return {villainState, currentVillain: nextVillain};
 }
 
-export function getCurrentVillain(state:VillainState): Villain {
-    if(!state || typeof state.currentIndex !== "number"){
+export function getCurrentVillain(villainState:VillainState): Villain {
+    if(!villainState || typeof villainState.currentIndex !== "number"){
         return VillainArray[0];
     }
-    return VillainArray[state.currentIndex];
+    return VillainArray[villainState.currentIndex];
 }
 
-function getNextVillain(state: VillainState): Villain {
+function getNextVillain(villainState: VillainState): Villain {
     const villainCount = VillainArray.length;
-    if (state.defeatCounter < villainCount) {
-        return VillainArray[state.defeatCounter];
-    }
-    // If all the villains are defeated, return a random one
-    const nextVillainIndex = Math.floor(Math.random() * villainCount);
-    return VillainArray[nextVillainIndex];
+    return VillainArray[villainState.defeatCounter%villainCount];
 }
