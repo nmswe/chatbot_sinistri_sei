@@ -15,7 +15,6 @@ export interface ChatMessage {
 
 export interface ChatMessageProps {
     message: ChatMessage;
-    villainState: VillainState;
 }
 
 export interface ChatMessagesProps {

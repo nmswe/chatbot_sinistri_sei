@@ -7,7 +7,7 @@ import { MdContentCopy } from "react-icons/md";
 import { sixSinisters } from '../utils/arrayVillains';
 import { ChatMessageProps } from '../types/chatTypes/chat';
 
-export default function ChatMessage({ message, villainState }: ChatMessageProps) {
+export default function ChatMessage({ message }: ChatMessageProps) {
     return (
         <div
             className={`flex relative pb-3 last:pb-0 ${message.role === 'user' ? 'justify-end' : 'justify-start items-end'
