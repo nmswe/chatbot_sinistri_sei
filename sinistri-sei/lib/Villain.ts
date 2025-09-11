@@ -1,20 +1,20 @@
 export class VillainMessage {
-  constructor(
-    public readonly role: "model" | "user",
-    public readonly parts: { text: string }[]
-  ) {}
+    constructor(
+        public readonly role: "model" | "user",
+        public readonly parts: { text: string }[]
+    ) { }
 
-  static create(role: "model" | "user", text: string): VillainMessage {
-    return new VillainMessage(role, [{ text }]);
-  }
+    static create(role: "model" | "user", text: string): VillainMessage {
+        return new VillainMessage(role, [{ text }]);
+    }
 }
 
 export class Villain {
-  constructor(public readonly name: string, public readonly description: string, public readonly instructions: string, public readonly examples: VillainMessage[][]=[], public defeated: boolean = false) {
-  }
-  static create(name: string, description: string, instructions: string, examples: VillainMessage[][]=[]) : Villain{
-    return new Villain(name, description, instructions, examples);
-  }
+    constructor(public readonly name: string, public readonly description: string, public readonly instructions: string, public readonly examples: VillainMessage[][] = [], public defeated: boolean = false) {
+    }
+    static create(name: string, description: string, instructions: string, examples: VillainMessage[][] = []): Villain {
+        return new Villain(name, description, instructions, examples);
+    }
     toPromptString(): string {
         return `Il tuo nome è ${this.name} e lavori al call center della Sinister S.n.C.. ${this.description}. Devi rispondere alle domande dei clienti seguendo queste istruzioni: ${this.instructions}. Ecco alcuni esempi di domande che potresti ricevere: ${this.examples.join(", ")}. ${this.defeated ? "Sei stato sconfitto in precedenza, quindi ora devi rispondere in modo scocciato" : ""}`;
     }
