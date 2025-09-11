@@ -3,10 +3,6 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 
-const phrases = [
-
-];
-
 type Scene = {
   svg: string;
   audio: string;
@@ -58,7 +54,7 @@ export default function Intro() {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Avanza le frasi ogni 2 secondi
+  // Avanza le frasi ogni X secondi
   useEffect(() => {
     const interval = setInterval(() => {
       setPhraseIndex((prev) => prev + 1);
