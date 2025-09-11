@@ -27,6 +27,7 @@ export async function POST(req: Request) {
         id: crypto.randomUUID(),
         role: 'assistant',
         parts: [{ type: 'text', text }],
+        index: currentVillainIndex
     };
 
     const result = new Response(JSON.stringify({
