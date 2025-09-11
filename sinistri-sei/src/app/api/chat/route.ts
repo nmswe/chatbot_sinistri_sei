@@ -1,29 +1,27 @@
 import { google } from '@ai-sdk/google';
-import { convertToModelMessages, generateText, UIMessage } from 'ai';
-import { VillainArray } from '../../../../lib/Villain';
-import { isVillainDefeated } from '../../../../lib/VillainService';
+import { convertToModelMessages, generateText, jsonSchema, tool, UIMessage } from 'ai';
+import { defeatVillain, getCurrentVillain, VillainState } from '../../../../lib/VillainService';
 
-let currentVillainIndex = 0;
+export const defeatVillainTool = (state: VillainState) => tool({
+    description: 'Marks the current villain as defeated and advances to the next one.',
+    inputSchema: jsonSchema({}),
+    execute: async () => {
+        const { state: newState, currentVillain } = defeatVillain(state);
+        return { state: newState, villain: currentVillain};
+    },
+});
 
 export async function POST(req: Request) {
-    const { messages }: { messages: UIMessage[] } = await req.json();
+    const { messages , state}: { messages: UIMessage[], state: VillainState } = await req.json();
+    console.log("Received state:", state);
+    const currentVillain = getCurrentVillain(state);
+    console.log("Current Villain:", currentVillain.name);
 
-    const lastModelMessageObj = [...messages].reverse().find(m => m.role === 'assistant');
-    const lastModelMessage = lastModelMessageObj?.parts
-        ?.filter(p => p.type === 'text')
-        .map(p => p.text)
-        .join(' ') || '';
-
-    if (isVillainDefeated(lastModelMessage)) {
-        currentVillainIndex = (currentVillainIndex + 1) % VillainArray.length;
-    }
-
-    const currentVillain = VillainArray[currentVillainIndex];
-
-    const { text } = await generateText({
+    const { text, toolResults } = await generateText({
         model: google('gemini-2.5-flash'),
         system: currentVillain.toPromptString(),
         messages: convertToModelMessages(messages),
+        tools: { defeatVillain: defeatVillainTool(state) },
     });
 
     const modelMessage: UIMessage = {
@@ -34,7 +32,8 @@ export async function POST(req: Request) {
 
     const result = new Response(JSON.stringify({
         messages: [modelMessage],
-        index: currentVillainIndex,
+        state,
+        toolResults,
     }), {
         headers: { 'Content-Type': 'application/json' },
     });
