@@ -10,6 +10,7 @@ export interface ChatMessage {
     id: string;
     role: 'user' | 'assistant';
     parts: ChatMessagePart[];
+    indexVillainMessage: number;
 }
 
 export interface ChatMessageProps {

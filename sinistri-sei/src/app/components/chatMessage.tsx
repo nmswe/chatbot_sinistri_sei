@@ -13,10 +13,10 @@ export default function ChatMessage({ message, villainState }: ChatMessageProps)
             className={`flex relative pb-3 last:pb-0 ${message.role === 'user' ? 'justify-end' : 'justify-start items-end'
                 }`}
         >
-            {message.role !== 'user' && sixSinisters[villainState.currentIndex] && (
+            {message.role !== 'user' && sixSinisters[message.indexVillainMessage] && (
                 <img
-                    src={sixSinisters[villainState.currentIndex].src}
-                    alt={sixSinisters[villainState.currentIndex].alt}
+                    src={sixSinisters[message.indexVillainMessage].src}
+                    alt={sixSinisters[message.indexVillainMessage].alt}
                     className="w-8 h-8 mr-1"
                 />
             )}
