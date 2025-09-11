@@ -13,6 +13,7 @@ export default function Home() {
         height={100}
         className="absolute top-5 left-5"
       />
+      <ChatBot />
       */}
       <Intro />
     </div>
