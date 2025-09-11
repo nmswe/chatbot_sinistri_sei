@@ -7,16 +7,16 @@ import { MdContentCopy } from "react-icons/md";
 import { sixSinisters } from '../utils/arrayVillains';
 import { ChatMessageProps } from '../types/chatTypes/chat';
 
-export default function ChatMessage({ message }: ChatMessageProps) {
+export default function ChatMessage({ message, villainState }: ChatMessageProps) {
     return (
         <div
             className={`flex relative pb-3 last:pb-0 ${message.role === 'user' ? 'justify-end' : 'justify-start items-end'
                 }`}
         >
-            {message.role !== 'user' && sixSinisters[message.index] && (
+            {message.role !== 'user' && sixSinisters[villainState.currentIndex] && (
                 <img
-                    src={sixSinisters[message.index].src}
-                    alt={sixSinisters[message.index].alt}
+                    src={sixSinisters[villainState.currentIndex].src}
+                    alt={sixSinisters[villainState.currentIndex].alt}
                     className="w-8 h-8 mr-1"
                 />
             )}

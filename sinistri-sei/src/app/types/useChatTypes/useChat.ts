@@ -15,6 +15,6 @@ export interface SendMessageParams {
 export type ChatStatus = "ready" | "submitted" | "streaming";
 
 export interface VillainState {
-   currentIndex: number;
-   defeatCounter:number;
+    currentIndex: number;
+    defeatCounter: number;
 }
