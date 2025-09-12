@@ -3,10 +3,6 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 
-interface IntroProps {
-  onFinish?: () => void;
-}
-
 type Scene = {
   svg: string;
   audio: string;
@@ -15,8 +11,8 @@ type Scene = {
 
 const scenes: Scene[] = [
   {
-    svg: "/intro_scenarios/living-room-svg.svg",
-    audio: "/intro_soundtracks/intro_scena_1_Another Kid & Pratzapp - Kyoto (freetouse.com).mp3",
+    svg: "/outro_scenarios/living-room-svg.svg",
+    audio: "/outro_soundtracks/intro_scena_1_Another Kid & Pratzapp - Kyoto (freetouse.com).mp3",
     phrases: [  
       "Gianluca: Che palle ste attese telefoniche...",
       "Gianluca: Meno male che c’è il gatto a farmi compagnia...",
@@ -28,8 +24,8 @@ const scenes: Scene[] = [
     ],
   },
   {
-    svg: "/intro_scenarios/hyperspace_tunnel_ancala_nusantara_vecteezy.svg",
-    audio: "/intro_soundtracks/intro_scena_2_Zambolino - Wild Tales (freetouse.com).mp3",
+    svg: "/outro_scenarios/hyperspace_tunnel_ancala_nusantara_vecteezy.svg",
+    audio: "/outro_soundtracks/intro_scena_2_Zambolino - Wild Tales (freetouse.com).mp3",
     phrases: [
       "Gianluca: Ouu!! Ma dove sono finito?!?!",
       "Gianluca: Il mio salotto, dov’è??",
@@ -45,15 +41,15 @@ const scenes: Scene[] = [
     ],
   },
   {
-    svg: "/intro_scenarios/skyline_alex_zelnitskiy_vecteezy.svg",
-    audio: "/intro_soundtracks/intro_scena_3_Walen - Castle (freetouse.com).mp3",
+    svg: "/outro_scenarios/skyline_alex_zelnitskiy_vecteezy.svg",
+    audio: "/outro_soundtracks/intro_scena_3_Walen - Castle (freetouse.com).mp3",
     phrases: [
       "Caro Gianluca, ora hai una missione, devi salvare NY city e forse salverai te stesso....Buona fortuna."
     ],
   },
 ];
 
-export default function Intro({ onFinish }: IntroProps) {
+export default function Outro() {
   const [sceneIndex, setSceneIndex] = useState(0);
   const [phraseIndex, setPhraseIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -123,23 +119,6 @@ export default function Intro({ onFinish }: IntroProps) {
 
     fadeOutAndChange();
   }, [sceneIndex]);
-
-    // Controlla fine scena finale
-  useEffect(() => {
-    const currentScene = scenes[sceneIndex];
-
-    if (
-      sceneIndex === scenes.length - 1 &&
-      phraseIndex >= currentScene.phrases.length
-    ) {
-      // ultima scena → durata extra 8 secondi
-      const timeout = setTimeout(() => {
-        onFinish?.(); // segnala al genitore che ha finito
-      }, 8000);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [phraseIndex, sceneIndex, onFinish]);
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">
