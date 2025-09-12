@@ -39,7 +39,15 @@ export default function ChatBot() {
         audio.loop = true;
         audioRef.current = audio;
         audio.play().catch(err => console.error('Errore riproduzione audio:', err));
-    }, [villainState.currentIndex, audioUnlocked]);
+    }, [villainState.currentIndex, audioUnlocked, villainState.defeatCounter]);
+
+    useEffect(() => {
+        if (!villainState) return;
+        if (villainState.currentIndex === 0) return;
+        setShowLottie(true);
+        const timer = setTimeout(() => setShowLottie(false), 2000);
+        return () => clearTimeout(timer);
+    }, [villainState.currentIndex]);
 
     return (
         <div onClick={() => setAudioUnlocked(true)} className="w-full max-w-[600px] h-[650px] bg-white rounded-xl flex flex-col overflow-hidden relative">
@@ -59,7 +67,7 @@ export default function ChatBot() {
                 status={status}
             />
             {showLottie && (
-                <Spiderman villainState={villainState} setShowLottie={setShowLottie} />
+                <Spiderman />
             )}
         </div>
     );

@@ -30,8 +30,3 @@ export interface ChatInputProps {
     sendMessage: (message: { text: string }) => void;
     status: string;
 }
-
-export interface ISpiderman {
-    villainState: VillainState;
-    setShowLottie: Dispatch<SetStateAction<boolean>>;
-}
