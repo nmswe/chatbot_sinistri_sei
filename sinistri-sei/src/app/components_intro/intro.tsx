@@ -54,52 +54,70 @@ export default function Intro() {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Avanza le frasi ogni X secondi
+  // Avanza frasi ogni 2 secondi
   useEffect(() => {
     const interval = setInterval(() => {
       setPhraseIndex((prev) => prev + 1);
-    }, 3500);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
-  // Controlla se siamo alla fine delle frasi della scena → passa alla prossima
+  // Controlla passaggio scena
   useEffect(() => {
     if (phraseIndex >= scenes[sceneIndex].phrases.length) {
       if (sceneIndex + 1 < scenes.length) {
         setSceneIndex((s) => s + 1);
-        setPhraseIndex(0); // riparte dal primo messaggio della nuova scena
+        setPhraseIndex(0);
       } else {
-        // ultima scena: ferma sull’ultima frase
         setPhraseIndex(scenes[sceneIndex].phrases.length - 1);
       }
     }
   }, [phraseIndex, sceneIndex]);
 
-  // Gestione audio al cambio scena
+  // Gestione audio con fade out/in
   useEffect(() => {
     if (!audioRef.current) return;
 
-    audioRef.current.pause();
-    audioRef.current.src = scenes[sceneIndex].audio;
-    audioRef.current.load();
+    const audio = audioRef.current;
 
-    const playAudio = () => {
-      audioRef.current
-        ?.play()
-        .catch(() => console.log("Autoplay bloccato, attendo interazione..."));
+    const fadeOutAndChange = async () => {
+      // fade out graduale (da 1 → 0 in 1s)
+      let vol = 1.0;
+      const step = 0.1;
+      const interval = setInterval(() => {
+        vol = Math.max(0, vol - step);
+        audio.volume = vol;
+        if (vol <= 0) {
+          clearInterval(interval);
+
+          // cambio traccia
+          audio.pause();
+          audio.src = scenes[sceneIndex].audio;
+          audio.load();
+          audio.volume = 1.0;
+
+          // prova a riprodurre
+          const playAudio = () => {
+            audio
+              .play()
+              .catch(() =>
+                console.log("Autoplay bloccato, attendo interazione...")
+              );
+          };
+
+          playAudio();
+
+          // fallback su primo click
+          const enableAudio = () => {
+            playAudio();
+            document.removeEventListener("click", enableAudio);
+          };
+          document.addEventListener("click", enableAudio);
+        }
+      }, 100); // ogni 100ms abbasso di 0.1 → ~1s
     };
 
-    playAudio();
-
-    const enableAudio = () => {
-      playAudio();
-      document.removeEventListener("click", enableAudio);
-    };
-    document.addEventListener("click", enableAudio);
-
-    return () => {
-      document.removeEventListener("click", enableAudio);
-    };
+    fadeOutAndChange();
   }, [sceneIndex]);
 
   return (
