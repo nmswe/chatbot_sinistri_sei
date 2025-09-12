@@ -7,10 +7,12 @@ import useChat from '../hook/useChat';
 import ChatHeader from './chatHeader';
 import { ChatMessage } from '../types/chatTypes/chat';
 import { soundtrackMap } from '../utils/soundTraksVillains';
+import Spiderman from './spiderman';
 
 export default function ChatBot() {
     const { messages, sendMessage, status, villainState } = useChat();
     const [input, setInput] = useState<string>('');
+    const [showLottie, setShowLottie] = useState(false);
     const [audioUnlocked, setAudioUnlocked] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -56,6 +58,9 @@ export default function ChatBot() {
                 sendMessage={sendMessage}
                 status={status}
             />
+            {showLottie && (
+                <Spiderman villainState={villainState} setShowLottie={setShowLottie} />
+            )}
         </div>
     );
 }
