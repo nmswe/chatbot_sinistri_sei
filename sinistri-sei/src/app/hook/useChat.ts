@@ -36,7 +36,7 @@ function useChat() {
             localStorage.removeItem("messages");
             localStorage.removeItem("villainState");
             setMessages([]);
-            setVillainState({ currentIndex: 0, defeatCounter: 0 });
+            setVillainState({ currentIndex: 0, defeatCounter: 6 });
         }
     }, [villainState]);
 
