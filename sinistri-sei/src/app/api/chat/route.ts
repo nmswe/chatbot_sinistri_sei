@@ -15,11 +15,14 @@ export const defeatVillainTool = (villainState: VillainState) => tool({
 export async function POST(req: Request) {
     const { messages , villainState}: { messages: UIMessage[], villainState: VillainState } = await req.json();
     const currentVillain = getCurrentVillain(villainState);
+    const initialVillainIndex = villainState.currentIndex;
 
     const { text } = await generateText({
         model: google('gemini-2.5-flash'),
+        // prompt
         system: currentVillain.toPromptString(),
-        messages: convertToModelMessages(messages),
+        // convert the messages list to AI
+        messages: convertToModelMessages(messages, {ignoreIncompleteToolCalls : true}),
         tools: { defeatVillain: defeatVillainTool(villainState) },
     });
 
@@ -27,6 +30,7 @@ export async function POST(req: Request) {
         id: crypto.randomUUID(),
         role: 'assistant',
         parts: [{ type: 'text', text }],
+        indexVillainMessage: initialVillainIndex,
     };
 
     const result = new Response(JSON.stringify({

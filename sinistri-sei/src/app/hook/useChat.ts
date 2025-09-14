@@ -1,10 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatStatus, Message, SendMessageParams, VillainState } from "../types/useChatTypes/useChat";
+import { VillainArray } from "../../../lib/Villain";
 
 function useChat() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [status, setStatus] = useState<ChatStatus>("ready");
     const [villainState, setVillainState] = useState<VillainState>({ currentIndex: 0, defeatCounter: 0 });
+
+    useEffect(() => {
+        const storedMessages = localStorage.getItem("messages");
+        const storedVillainState = localStorage.getItem("villainState");
+
+        if (storedMessages) {
+            setMessages(JSON.parse(storedMessages));
+        }
+
+        if (storedVillainState) {
+            setVillainState(JSON.parse(storedVillainState));
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem("messages", JSON.stringify(messages));
+    }, [messages]);
+
+    useEffect(() => {
+        localStorage.setItem("villainState", JSON.stringify(villainState));
+    }, [villainState]);
+
+    useEffect(() => {
+        const fullCycleFinished =
+        villainState.currentIndex === 0 &&
+        villainState.defeatCounter !== 0 &&
+        villainState.defeatCounter % VillainArray.length === 0;
+        if (fullCycleFinished) {
+            localStorage.removeItem("messages");
+            setMessages([]);        }
+    }, [villainState.currentIndex, villainState.defeatCounter]);
 
     const sendMessage = async ({ text }: SendMessageParams) => {
         const userMessage: Message = {
@@ -38,7 +70,6 @@ function useChat() {
             setStatus("ready");
         }
     };
-
 
     return { messages, status, villainState, sendMessage };
 }
