@@ -52,6 +52,23 @@ export default function Intro({ onFinish }: IntroProps) {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Abilita audio al primo click
+  useEffect(() => {
+    const handleClick = () => {
+      if (audioRef.current) {
+        audioRef.current.play().catch(() => {});
+      }
+      document.removeEventListener("click", handleClick);
+    };
+
+    document.addEventListener("click", handleClick);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
+
+
   // Avanza frasi
   useEffect(() => {
     // ultima scena → mostra la frase per 5 secondi
@@ -108,14 +125,6 @@ export default function Intro({ onFinish }: IntroProps) {
     };
 
     playAudio();
-
-    // fallback su primo click
-    const enableAudio = () => {
-      playAudio();
-      document.removeEventListener("click", enableAudio);
-    };
-    document.addEventListener("click", enableAudio);
-
   }, [sceneIndex]);
 
   // Controlla fine scena finale
@@ -124,10 +133,13 @@ export default function Intro({ onFinish }: IntroProps) {
 
     if (sceneIndex === scenes.length - 1 && phraseIndex > currentScene.phrases.length - 1) {
       if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+        audioRef.current.loop = false;   // disattiva loop
+        audioRef.current.pause();        // stoppa
+        audioRef.current.currentTime = 0; // reset
       }
 
+      // 🔒 rimuovo ogni listener per sempre
+      document.body.onclick = null;
       onFinish?.(); // segnala al genitore che ha finito
     }
   }, [sceneIndex, phraseIndex, onFinish]);
