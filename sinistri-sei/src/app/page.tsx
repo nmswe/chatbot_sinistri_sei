@@ -17,26 +17,7 @@ export default function Home() {
 
   return (
     <div className="w-full min-h-dvh flex justify-center items-center bg-gray-100 px-2 relative">
-      {SHOW_INTRO && !showAfterIntro && (
-        <Intro onFinish={() => setShowAfterIntro(true)} />
-      )}
-
-      {showAfterIntro && (
-        <>
-          <Image
-            src="/logo.png"
-            alt="Logo"
-            width={100}
-            height={100}
-            className="absolute top-5 left-5"
-          />
-          <ChatBot />
-          <Toaster position="bottom-center" />
-          {/* 
-            <Outro />
-          */}
-        </>
-      )}
+      <><Outro /></>
     </div>
   );
 }
