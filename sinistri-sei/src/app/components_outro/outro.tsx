@@ -58,25 +58,40 @@ export default function Outro({ onFinish }: OutroProps) {
 
   // Avanza frasi
   useEffect(() => {
-    // ultima scena → mostra la frase per 5 secondi
-    if (sceneIndex === scenes.length - 1) {
-      if (phraseIndex === 0) {
-        const timeout = setTimeout(() => {
-          setPhraseIndex(1); // va oltre l’unica frase
-        }, 5000);
+    const currentScene = scenes[sceneIndex];
+    const lastPhraseIndex = currentScene.phrases.length - 1;
 
-        return () => clearTimeout(timeout);
-      }
-      return;
+    // se NON siamo all'ultima frase → continuo ad avanzare
+    if (phraseIndex < lastPhraseIndex) {
+      const interval = setInterval(() => {
+        setPhraseIndex((prev) => prev + 1);
+      }, 3000); // 3 secondi tra le frasi
+
+      return () => clearInterval(interval);
     }
 
-    // altre scene → avanzamento normale
-    const interval = setInterval(() => {
-      setPhraseIndex((prev) => prev + 1);
-    }, 5000);
+    // se siamo all'ultima frase → attendo prima di cambiare scena
+    if (phraseIndex === lastPhraseIndex) {
+      const timeout = setTimeout(() => {
+        if (sceneIndex + 1 < scenes.length) {
+          setSceneIndex((s) => s + 1);
+          setPhraseIndex(0);
+        } else {
+          // ultima scena → finito
+          if (audioRef.current) {
+            audioRef.current.loop = false;
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+          }
+          document.body.onclick = null;
+          onFinish?.();
+        }
+      }, 3000); // tempo di visibilità ultima frase
 
-    return () => clearInterval(interval);
-  }, [sceneIndex, phraseIndex]);
+      return () => clearTimeout(timeout);
+    }
+  }, [sceneIndex, phraseIndex, onFinish]);
+
 
 
   // Controlla passaggio scena
