@@ -15,10 +15,9 @@
 </h3>
 
 <p align="center">
-  <a>
-    <img height="150" src="https://github.com/nmswe/nmswe/blob/repo_readme/gif/spidey.gif"/>
-  </a>
+  <img height="150" src="./gif/spidey.gif" alt="Spidey">
 </p>
+
 
 <h2> ⚙️ &nbsp;How to run this project</h2>
 
