@@ -16,7 +16,7 @@
 
 <p align="center">
   <a>
-    <img height="150" src="https://github.com/nmswe/nmswe/blob/dev/gif/spidey.gif"/>
+    <img height="150" src="https://github.com/nmswe/nmswe/blob/repo_readme/gif/spidey.gif"/>
   </a>
 </p>
 
