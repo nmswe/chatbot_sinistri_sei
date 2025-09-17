@@ -18,6 +18,21 @@
   <img height="150" src="./gif/spidey.gif" alt="Spidey">
 </p>
 
+<p>
+  This project was born out of the <a href="https://www.tomorrowdevs.com/" target="_blank" rel="noopener noreferrer"><strong>Tomorrow Devs Summer Camp</strong></a> experience.
+  It was created with the goal of learning how to build a full-fledged chatbot application from scratch, including deployment.
+</p>
+
+
+<p>
+  The challenge was: <em>"Build a chatbot that simulates an endless phone hold, with multiple personalities, that is both entertaining and frustrating."</em>
+</p>
+
+<p>
+  This is our take on that challenge.
+</p>
+
+
 
 <h2> ⚙️ &nbsp;How to run this project</h2>
 
