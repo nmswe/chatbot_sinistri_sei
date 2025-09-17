@@ -9,7 +9,11 @@ import { ChatMessage } from '../types/chatTypes/chat';
 import { soundtrackMap } from '../utils/soundTraksVillains';
 import Spiderman from './spiderman';
 
-export default function ChatBot() {
+interface ChatBotProps {
+  onAllVillainsDefeated?: () => void;
+}
+
+export default function ChatBot({ onAllVillainsDefeated }: ChatBotProps) {
     const { messages, sendMessage, status, villainState } = useChat();
     const [input, setInput] = useState<string>('');
     const [showLottie, setShowLottie] = useState(false);
@@ -48,6 +52,12 @@ export default function ChatBot() {
         const timer = setTimeout(() => setShowLottie(false), 2000);
         return () => clearTimeout(timer);
     }, [villainState.currentIndex]);
+
+    useEffect(() => {
+        if (villainState?.defeatCounter === 6) {
+            onAllVillainsDefeated?.(); // segnala al parent che deve mostrare Outro
+        }
+    }, [villainState?.defeatCounter, onAllVillainsDefeated]);
 
     return (
         <div onClick={() => setAudioUnlocked(true)} className="w-full max-w-[600px] h-[650px] bg-white rounded-xl flex flex-col overflow-hidden relative">
