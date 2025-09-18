@@ -29,8 +29,8 @@ export async function POST(req: Request) {
         model: google('gemini-2.5-flash'),
         // prompt
         system: currentVillain.toPromptString(),
-        // convert the messages list to AI
-        messages: convertToModelMessages(messages, {ignoreIncompleteToolCalls : true}),
+        // convert the messages list to AI. give the model only the messages from the current villain
+        messages: convertToModelMessages(messages.filter(m => m.indexVillainMessage === initialVillainIndex), {ignoreIncompleteToolCalls : true}),
         tools: shouldAllowDefeat? { defeatVillain: defeatVillainTool(villainState) }: {},
     });
 
