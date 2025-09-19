@@ -67,7 +67,6 @@ export default function ChatBot({ onAllVillainsDefeated }: ChatBotProps) {
                 messages={messages as ChatMessage[]}
                 status={status}
                 messagesEndRef={messagesEndRef}
-                villainState={villainState}
             />
 
             <ChatInput
