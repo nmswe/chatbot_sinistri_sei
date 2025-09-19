@@ -8,7 +8,12 @@ import { OutroProps } from "@/app/types/outroTypes/outro";
 export default function Outro({ onFinish }: OutroProps) {
   const [sceneIndex, setSceneIndex] = useState(0);
   const [phraseIndex, setPhraseIndex] = useState(0);
+  const [visible, setVisible] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    setVisible(true);
+  }, [sceneIndex]);
 
   useEffect(() => {
     const handleClick = () => {
@@ -103,7 +108,9 @@ export default function Outro({ onFinish }: OutroProps) {
   }, [sceneIndex, phraseIndex, onFinish]);
 
   return (
-    <div className="relative w-full h-screen">
+    <div className={`relative w-full h-screen transition-opacity duration-1000 ${
+            visible ? "opacity-100" : "opacity-0"}`}
+    >
       <Image
         src={scenes[sceneIndex].svg}
         alt="Scenario"
