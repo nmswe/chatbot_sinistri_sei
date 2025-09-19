@@ -19,6 +19,7 @@ export class Villain {
         return `Il tuo nome è ${this.name} e lavori al call center della Sinister S.n.C.. ${this.description}. Devi rispondere alle domande dei clienti seguendo queste istruzioni: ${this.instructions}. Ecco alcuni esempi di domande che potresti ricevere: ${this.examples.join(", ")}. ${this.defeated ? "Sei stato sconfitto in precedenza, quindi ora devi rispondere in modo scocciato" : ""}`;
     }
 }
+
 export const VillainArray: Villain[] = [
         Villain.create(
         "Vulture",
