@@ -1,17 +1,13 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import ChatMessages from './chatMessages';
 import ChatInput from './chatInput';
-import useChat from '../hook/useChat';
+import useChat from '../../hook/useChat';
 import ChatHeader from './chatHeader';
-import { ChatMessage } from '../types/chatTypes/chat';
-import { soundtrackMap } from '../utils/soundTraksVillains';
+import { ChatBotProps, ChatMessage } from '../../types/chatTypes/chat';
+import { soundtrackMap } from '../../utils/soundTraksVillains';
 import Spiderman from './spiderman';
-
-interface ChatBotProps {
-  onAllVillainsDefeated?: () => void;
-}
+import ChatMessages from './chatMessages';
 
 export default function ChatBot({ onAllVillainsDefeated }: ChatBotProps) {
     const { messages, sendMessage, status, villainState } = useChat();
@@ -55,7 +51,7 @@ export default function ChatBot({ onAllVillainsDefeated }: ChatBotProps) {
 
     useEffect(() => {
         if (villainState?.defeatCounter === 6) {
-            onAllVillainsDefeated?.(); // segnala al parent che deve mostrare Outro
+            onAllVillainsDefeated?.();
         }
     }, [villainState?.defeatCounter, onAllVillainsDefeated]);
 
