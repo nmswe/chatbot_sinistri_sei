@@ -3,7 +3,6 @@ export class VillainMessage {
         public readonly role: "model" | "user",
         public readonly parts: { text: string }[]
     ) { }
-
     static create(role: "model" | "user", text: string): VillainMessage {
         return new VillainMessage(role, [{ text }]);
     }

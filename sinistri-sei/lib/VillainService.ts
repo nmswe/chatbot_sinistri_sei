@@ -2,7 +2,6 @@ import { VillainState } from '@/app/types/useChatTypes/useChat';
 import { Villain, VillainArray } from './Villain';
 
 export function defeatVillain(villainState:VillainState): {villainState: VillainState, currentVillain: Villain} {
-    console.log(villainState, "log VillainService");
     villainState.defeatCounter++;
 
     VillainArray[villainState.currentIndex].defeated = true;
