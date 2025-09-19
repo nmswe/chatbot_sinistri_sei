@@ -3,9 +3,21 @@ import { ChatStatus, Message, SendMessageParams, VillainState } from "../types/u
 import { VillainArray } from "../../../lib/Villain";
 
 function useChat() {
-    const [messages, setMessages] = useState<Message[]>([]);
     const [status, setStatus] = useState<ChatStatus>("ready");
-    const [villainState, setVillainState] = useState<VillainState>({ currentIndex: 0, defeatCounter: 0 });
+    const [messages, setMessages] = useState<Message[]>(() => {
+        if (typeof window !== "undefined") {
+            const stored = localStorage.getItem("messages");
+            return stored ? JSON.parse(stored) : [];
+        }
+        return [];
+    });
+    const [villainState, setVillainState] = useState<VillainState>(() => {
+        if (typeof window !== "undefined") {
+            const stored = localStorage.getItem("villainState");
+            return stored ? JSON.parse(stored) : { currentIndex: 0, defeatCounter: 0 };
+        }
+        return { currentIndex: 0, defeatCounter: 0 };
+    });
 
     useEffect(() => {
         const storedMessages = localStorage.getItem("messages");
@@ -30,12 +42,13 @@ function useChat() {
 
     useEffect(() => {
         const fullCycleFinished =
-        villainState.currentIndex === 0 &&
-        villainState.defeatCounter !== 0 &&
-        villainState.defeatCounter % VillainArray.length === 0;
+            villainState.currentIndex === 0 &&
+            villainState.defeatCounter !== 0 &&
+            villainState.defeatCounter % VillainArray.length === 0;
         if (fullCycleFinished) {
             localStorage.removeItem("messages");
-            setMessages([]);        }
+            setMessages([]);
+        }
     }, [villainState.currentIndex, villainState.defeatCounter]);
 
     const sendMessage = async ({ text }: SendMessageParams) => {
@@ -71,7 +84,7 @@ function useChat() {
         }
     };
 
-    return { messages, status, villainState, sendMessage };
+    return { messages, status, villainState, sendMessage, setMessages, setVillainState };
 }
 
 export default useChat;

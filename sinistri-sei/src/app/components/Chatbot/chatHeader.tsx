@@ -1,5 +1,5 @@
-import { VillainState } from "../types/useChatTypes/useChat";
-import { sixSinisters } from "../utils/arrayVillains";
+import { VillainState } from "../../types/useChatTypes/useChat";
+import { sixSinisters } from "../../utils/arrayVillains";
 
 export default function ChatHeader(villainState : VillainState) {
     return (

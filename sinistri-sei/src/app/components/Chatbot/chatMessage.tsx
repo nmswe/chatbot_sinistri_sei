@@ -2,10 +2,10 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
-import { handleCopy } from '../utils/functionCopyTexts';
+import { handleCopy } from '../../utils/functionCopyTexts';
 import { MdContentCopy } from "react-icons/md";
-import { sixSinisters } from '../utils/arrayVillains';
-import { ChatMessageProps } from '../types/chatTypes/chat';
+import { sixSinisters } from '../../utils/arrayVillains';
+import { ChatMessageProps } from '../../types/chatTypes/chat';
 
 export default function ChatMessage({ message }: ChatMessageProps) {
     return (

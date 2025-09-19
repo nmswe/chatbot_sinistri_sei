@@ -1,4 +1,4 @@
-import { ChatMessagesProps } from '../types/chatTypes/chat';
+import { ChatMessagesProps } from '../../types/chatTypes/chat';
 import ChatMessage from './chatMessage';
 import ChatTypingIndicator from './chatTypingIndicator';
 
