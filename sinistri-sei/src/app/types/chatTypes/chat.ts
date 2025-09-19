@@ -21,7 +21,6 @@ export interface ChatMessagesProps {
     messages: ChatMessage[];
     status: string;
     messagesEndRef: RefObject<HTMLDivElement | null>;
-    villainState: VillainState;
 }
 
 export interface ChatInputProps {
