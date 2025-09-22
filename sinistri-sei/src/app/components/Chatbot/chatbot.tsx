@@ -9,13 +9,21 @@ import { soundtrackMap } from '../../utils/soundTraksVillains';
 import Spiderman from './spiderman';
 import ChatMessages from './chatMessages';
 
-export default function ChatBot({ onAllVillainsDefeated }: ChatBotProps) {
+export default function ChatBot({ onAllVillainsDefeated, onReset }: ChatBotProps) {
     const { messages, sendMessage, status, villainState } = useChat();
     const [input, setInput] = useState<string>('');
     const [showLottie, setShowLottie] = useState(false);
     const [audioUnlocked, setAudioUnlocked] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    const stopAudio = () => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+            audioRef.current = null;
+        }
+    };
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -56,20 +64,19 @@ export default function ChatBot({ onAllVillainsDefeated }: ChatBotProps) {
     }, [villainState?.defeatCounter, onAllVillainsDefeated]);
 
     return (
-        <div onClick={() => setAudioUnlocked(true)} className="w-full max-w-[600px] h-[650px] bg-white rounded-xl flex flex-col overflow-hidden relative">
+        <div onClick={() => setAudioUnlocked(true)} className="w-full max-w-[600px] h-[650px] border-4 border-yellow-400 bg-white rounded-xl shadow-[0_0_30px_#facc15] flex flex-col overflow-hidden relative">
             <ChatHeader {...villainState} />
-
             <ChatMessages
                 messages={messages as ChatMessage[]}
                 status={status}
                 messagesEndRef={messagesEndRef}
             />
-
             <ChatInput
                 input={input}
                 setInput={setInput}
                 sendMessage={sendMessage}
                 status={status}
+                onReset={(e) => onReset(e, stopAudio)}
             />
             {showLottie && (
                 <Spiderman />

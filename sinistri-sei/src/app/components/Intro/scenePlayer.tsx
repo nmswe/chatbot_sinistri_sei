@@ -25,7 +25,7 @@ export default function ScenePlayer({ onFinish }: IntroProps) {
     }, [phraseIndex, sceneIndex, onFinish]);
 
     useEffect(() => {
-        const interval = setInterval(() => setPhraseIndex((p) => p + 1), 3500);
+        const interval = setInterval(() => setPhraseIndex((p) => p + 1), 5500);
         return () => clearInterval(interval);
     }, [sceneIndex]);
 
@@ -48,15 +48,13 @@ export default function ScenePlayer({ onFinish }: IntroProps) {
                 fill
                 className="object-contain"
             />
-
             <div className="absolute inset-0 flex items-center justify-center px-4">
-                <div className="bg-white/90 px-6 py-4 rounded-xl shadow-lg max-w-lg text-center">
-                    <div className="text-lg font-semibold whitespace-pre-line">
+                <div className="w-[90%] max-w-2xl px-6 py-4 bg-black/80 border-4 border-yellow-400 shadow-inner rounded-lg flex justify-center items-center">
+                    <div className="text-white text-lg font-mono text-center">
                         {scenes[sceneIndex].phrases[phraseIndex]}
                     </div>
                 </div>
             </div>
-
             <audio ref={audioRef} />
         </div>
     );

@@ -37,7 +37,7 @@ export default function Outro({ onFinish }: OutroProps) {
     if (phraseIndex < lastPhraseIndex) {
       const interval = setInterval(() => {
         setPhraseIndex((prev) => prev + 1);
-      }, 3000);
+      }, 5500);
 
       return () => clearInterval(interval);
     }
@@ -56,7 +56,7 @@ export default function Outro({ onFinish }: OutroProps) {
           document.body.onclick = null;
           onFinish?.();
         }
-      }, 3000);
+      }, 5500);
 
       return () => clearTimeout(timeout);
     }
@@ -118,8 +118,8 @@ export default function Outro({ onFinish }: OutroProps) {
         className="object-contain"
       />
       <div className="absolute inset-0 flex items-center justify-center px-4">
-        <div className="bg-white/90 px-6 py-4 rounded-xl shadow-lg max-w-lg text-center">
-          <div className="text-lg font-semibold whitespace-pre-line">
+        <div className="w-[90%] max-w-lg px-6 py-4 bg-black/80 border-4 border-yellow-400 shadow-inner rounded-lg flex justify-center items-center">
+          <div className="text-white text-lg font-mono text-center whitespace-pre-line">
             {scenes[sceneIndex].phrases[phraseIndex]}
           </div>
         </div>

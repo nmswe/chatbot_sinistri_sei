@@ -27,8 +27,10 @@ export interface ChatInputProps {
     setInput: Dispatch<SetStateAction<string>>;
     sendMessage: (message: { text: string }) => void;
     status: string;
+    onReset: (e: React.MouseEvent<HTMLButtonElement>, stopAudio?: () => void) => void;
 }
 
 export interface ChatBotProps {
     onAllVillainsDefeated?: () => void;
+    onReset: (e: React.MouseEvent<HTMLButtonElement>, stopAudio?: () => void) => void;
 }
