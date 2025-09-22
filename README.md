@@ -1,48 +1,36 @@
-<p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=_custom_gradient:0:ff0000,25:cc0000,50:800080,75:0000cc,100:0000ff&text=🕷️Welcome%20to%20the%20Sinister%20Six%20S.n.C.'s%20Chatbot&height=100&section=header&fontColor=ffffff&strokeColor=000&strokeWidth=0.5&fontSize=28"/>
-</p>
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-<h2 align="center">
-  Do you want to solve some of your problems?
-</h2>
+## Getting Started
 
-<h3 align="center">
-  Don't worry we got your back ... to stab it 🗡️
-</h3>
+First, run the development server:
 
-<h3 align="center">
-  Our team during the development:
-</h3>
-
-<p align="center">
-  <img height="150" src="./gif/spidey.gif" alt="Spidey">
-</p>
-
-<p>
-  This project was born out of the <a href="https://www.tomorrowdevs.com/" target="_blank" rel="noopener noreferrer"><strong>Tomorrow Devs Summer Camp</strong></a> experience.
-  It was created with the goal of learning how to build a full-fledged chatbot application from scratch, including deployment.
-</p>
-
-
-<p>
-  The challenge was: <em>"Build a chatbot that simulates an endless phone hold, with multiple personalities, that is both entertaining and frustrating."</em>
-</p>
-
-<p>
-  This is our take on that challenge.
-</p>
-
-
-
-<h2> ⚙️ &nbsp;How to run this project</h2>
-
-```yaml
-
-# Scrivere le istruzioni per lanciare questo progetto
-
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-<p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=_custom_gradient:0:ff0000,25:cc0000,50:800080,75:0000cc,100:0000ff&height=100&section=footer"/>
-</p>
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
