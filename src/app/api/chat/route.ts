@@ -2,10 +2,10 @@ import { google } from '@ai-sdk/google';
 import { convertToModelMessages, generateText } from 'ai';
 import { defeatVillainTool, getCurrentVillain } from '../../../../lib/VillainService';
 import { VillainState } from '@/app/types/useChatTypes/useChat';
-import { VillainMessage } from '@/app/types/chatTypes/chat';
+import { ChatMessage } from '@/app/types/chatTypes/chat';
 
 export async function POST(req: Request) {
-    const { messages , villainState}: { messages: VillainMessage[], villainState: VillainState } = await req.json();
+    const { messages , villainState}: { messages: ChatMessage[], villainState: VillainState } = await req.json();
     
     const currentVillain = getCurrentVillain(villainState);
     const initialVillainIndex = villainState.currentIndex;
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         tools: shouldAllowDefeat? { defeatVillain: defeatVillainTool(villainState) }: {},
     });
 
-    const modelMessage: VillainMessage | null = text.trim()? {
+    const modelMessage: ChatMessage | null = text.trim()? {
         id: crypto.randomUUID(),
         role: 'assistant',
         parts: [{ type: 'text', text }],

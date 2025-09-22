@@ -1,4 +1,3 @@
-import { UIMessage } from 'ai';
 import { Dispatch, SetStateAction, RefObject } from 'react';
 
 export interface ChatMessagePart {
@@ -35,7 +34,3 @@ export interface ChatBotProps {
     onAllVillainsDefeated?: () => void;
     onReset: (e: React.MouseEvent<HTMLButtonElement>, stopAudio?: () => void) => void;
 }
-
-export type VillainMessage = UIMessage & {
-    indexVillainMessage?: number;
-};

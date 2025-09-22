@@ -65,7 +65,7 @@ export default function Home() {
       )}
       {showAfterIntro && !showOutro && (
         <>
-          <Image src={'/bg.svg'} alt='Image background' className='absolute top-0 left-0 w-full h-full object-cover' width={200} height={200} />
+          <Image src={'/bg.svg'} alt='Image background' className="absolute top-0 left-0 w-full h-full object-cover invert-[40%] sepia-[10%] saturate-[1000%] hue-rotate-[180deg] brightness-90" width={200} height={200} />
           <ChatBot
             onAllVillainsDefeated={() => {
               setShowOutro(true);
