@@ -6,6 +6,7 @@ import { VillainMessage } from '@/app/types/chatTypes/chat';
 
 export async function POST(req: Request) {
     const { messages , villainState}: { messages: VillainMessage[], villainState: VillainState } = await req.json();
+    
     const currentVillain = getCurrentVillain(villainState);
     const initialVillainIndex = villainState.currentIndex;
 
