@@ -9,11 +9,14 @@ export default function ChatInput({
   onReset,
 }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  // Local state that decides whether to show the Reset button
   const [dontRestart, setDontRestart] = useState(false);
 
   useEffect(() => {
+    // On component mount, check if "dontRestart" exists in localStorage
     const dontRestart = localStorage.getItem("dontRestart");
     if (dontRestart) {
+      // Convert the stored string ("true"/"false") back to a boolean
       setDontRestart(JSON.parse(dontRestart));
     }
   }, []);

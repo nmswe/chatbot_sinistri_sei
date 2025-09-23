@@ -9,14 +9,21 @@ import { soundtrackMap } from '../../utils/soundTraksVillains';
 import Spiderman from './spiderman';
 import ChatMessages from './chatMessages';
 
+/**
+ * ChatBot component
+ * Handles the villain chat logic, audio playback, and UI interactions.
+ * Calls onAllVillainsDefeated() when all villains are beaten,
+ * and onReset() to restart the experience.
+ */
 export default function ChatBot({ onAllVillainsDefeated, onReset }: ChatBotProps) {
     const { messages, sendMessage, status, villainState } = useChat();
-    const [input, setInput] = useState<string>('');
-    const [showLottie, setShowLottie] = useState(false);
-    const [audioUnlocked, setAudioUnlocked] = useState(false);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const [input, setInput] = useState<string>('');           // user input text
+    const [showLottie, setShowLottie] = useState(false);      // show Spiderman animation
+    const [audioUnlocked, setAudioUnlocked] = useState(false); // unlock audio on first click
+    const messagesEndRef = useRef<HTMLDivElement>(null);      // for auto-scroll
+    const audioRef = useRef<HTMLAudioElement | null>(null);   // soundtrack reference
 
+    // Stop and reset audio
     const stopAudio = () => {
         if (audioRef.current) {
             audioRef.current.pause();
@@ -25,13 +32,16 @@ export default function ChatBot({ onAllVillainsDefeated, onReset }: ChatBotProps
         }
     };
 
+    // Auto-scroll to the latest message
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages, status]);
 
+    // Play villain soundtrack when state changes
     useEffect(() => {
         if (!villainState || !audioUnlocked) return;
 
+        // Special case: all villains defeated → stop music
         if (villainState.defeatCounter === 6 && villainState.currentIndex === 0) {
             audioRef.current?.pause();
             audioRef.current = null;
@@ -46,9 +56,10 @@ export default function ChatBot({ onAllVillainsDefeated, onReset }: ChatBotProps
         const audio = new Audio(audioUrl);
         audio.loop = true;
         audioRef.current = audio;
-        audio.play().catch(err => console.error('Errore riproduzione audio:', err));
+        audio.play().catch(err => console.error('Audio playback error:', err));
     }, [villainState.currentIndex, audioUnlocked, villainState.defeatCounter]);
 
+    // Show Spiderman animation briefly when villain changes
     useEffect(() => {
         if (!villainState) return;
         if (villainState.currentIndex === 0) return;
@@ -57,6 +68,7 @@ export default function ChatBot({ onAllVillainsDefeated, onReset }: ChatBotProps
         return () => clearTimeout(timer);
     }, [villainState.currentIndex]);
 
+    // Trigger event when all villains are defeated
     useEffect(() => {
         if (villainState?.defeatCounter === 6) {
             onAllVillainsDefeated?.();
@@ -64,7 +76,10 @@ export default function ChatBot({ onAllVillainsDefeated, onReset }: ChatBotProps
     }, [villainState?.defeatCounter, onAllVillainsDefeated]);
 
     return (
-        <div onClick={() => setAudioUnlocked(true)} className="w-full max-w-[600px] h-[650px] border-4 border-yellow-400 bg-white rounded-xl shadow-[0_0_30px_#facc15] flex flex-col overflow-hidden relative">
+        <div
+            onClick={() => setAudioUnlocked(true)} // unlock audio on first user click
+            className="w-full max-w-[600px] h-[650px] border-4 border-yellow-400 bg-white rounded-xl shadow-[0_0_30px_#facc15] flex flex-col overflow-hidden relative"
+        >
             <ChatHeader {...villainState} />
             <ChatMessages
                 messages={messages as ChatMessage[]}
@@ -78,9 +93,7 @@ export default function ChatBot({ onAllVillainsDefeated, onReset }: ChatBotProps
                 status={status}
                 onReset={(e) => onReset(e, stopAudio)}
             />
-            {showLottie && (
-                <Spiderman />
-            )}
+            {showLottie && <Spiderman />}
         </div>
     );
 }

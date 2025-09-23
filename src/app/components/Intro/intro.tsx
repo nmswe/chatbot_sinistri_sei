@@ -6,11 +6,17 @@ import WelcomeScreen from "./welcomeScreen";
 import ScenePlayer from "./scenePlayer";
 import { IntroProps } from "@/app/types/introTypes/intro";
 
+/**
+ * Intro component
+ * Shows a loader → welcome screen → plays intro scenes.
+ * Calls onFinish() when the intro sequence is done.
+ */
 export default function Intro({ onFinish }: IntroProps) {
   const [showLoader, setShowLoader] = useState(true);
   const [showWelcome, setShowWelcome] = useState(false);
   const [started, setStarted] = useState(false);
 
+  // Show loader for 2s, then welcome screen
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowLoader(false);
@@ -19,6 +25,7 @@ export default function Intro({ onFinish }: IntroProps) {
     return () => clearTimeout(timer);
   }, []);
 
+  // When user presses start → begin scene player
   const handleStart = () => {
     setStarted(true);
     setShowWelcome(false);

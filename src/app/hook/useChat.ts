@@ -2,6 +2,40 @@ import { useEffect, useState } from "react";
 import { ChatStatus, Message, SendMessageParams, VillainState } from "../types/useChatTypes/useChat";
 import { VillainArray } from "../../../lib/Villain";
 
+/**
+ * Custom React hook for managing an interactive chat with a "villain state".
+ *
+ * ### Main Features:
+ * - Manages chat messages (`messages`), persisting them in `localStorage`.
+ * - Manages the villain state (`villainState`) with current index and defeat counter.
+ * - Sends user messages to the `/api/chat` endpoint and updates responses.
+ * - Automatically resets the chat after a full villain cycle.
+ *
+ * ### Returned state:
+ * - `messages`: current list of chat messages.
+ * - `status`: chat status (`"ready" | "submitted" | "streaming"`).
+ * - `villainState`: villain state `{ currentIndex: number; defeatCounter: number }`.
+ *
+ * ### Available methods:
+ * - `sendMessage({ text })`: sends a user message and updates the state.
+ * - `setMessages`: setter to override messages (use with caution).
+ * - `setVillainState`: setter to override the villain state.
+ *
+ * @example
+ * ```tsx
+ * const { messages, status, villainState, sendMessage } = useChat();
+ *
+ * sendMessage({ text: "Hello villain!" });
+ * ```
+ *
+ * @returns {Object} An object with chat state and helper methods:
+ * - `messages`
+ * - `status`
+ * - `villainState`
+ * - `sendMessage`
+ * - `setMessages`
+ * - `setVillainState`
+ */
 function useChat() {
     const [status, setStatus] = useState<ChatStatus>("ready");
     const [messages, setMessages] = useState<Message[]>(() => {
