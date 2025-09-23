@@ -1,4 +1,4 @@
-# Front end docs
+# Front-End
 
 ## Villains Chat Game
 
