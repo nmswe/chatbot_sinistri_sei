@@ -4,6 +4,8 @@
 
 The backend powers the villain chat game by managing villain logic and handling chat interactions through a Next.js API route. It integrates AI for dynamic villain responses and tracks game state server-side.
 
+Note: The backend is stateless — it does not persist chat history or villain state between calls. All state must be supplied by the client.
+
 This project uses **Next.js API routes** and **TypeScript** for type safety and maintainability. 
 
 Villain data and defeat logic are modularized in `lib/`, while the chat API endpoint orchestrates AI-driven conversations and game progression.
@@ -21,13 +23,13 @@ The backend consists of two main parts:
   Encapsulates all villain-related data and logic, making it easy to manage villain states and interactions.
 
 #### a. `Villain.ts`
-- Defines the villain model: name, traits, images, soundtracks, and prompt generation.
+- Defines the villain model: name, traits and prompt generation.
 - Provides methods to format villain data for use in AI prompts (e.g., `toPromptString()`).
 
 #### b. `VillainService.ts`
 - Centralizes villain-related operations:
   - `getCurrentVillain(villainState)`: Returns the active villain based on game state.
-  - `defeatVillainTool(villainState)`: Supplies logic for determining if a villain can be defeated, used as a tool in AI interactions.
+  - `defeatVillainTool(villainState)`: Supplies logic for villain switching after defeat, used as a tool in AI interactions.
 
 ---
 
@@ -35,9 +37,9 @@ The backend consists of two main parts:
 
 - **Endpoint:** `/api/chat`
 - **Method:** `POST`
-- **Purpose:**  
-  Handles chat requests, generates villain responses using AI, and manages villain defeat logic.
+- **Purpose:** Handles chat requests, generates villain responses using AI, and manages villain defeat logic.
 
+Because the backend is stateless, each call to /api/chat must include the full messages history and current villainState. The server does not cache or recall earlier conversation state.
 #### Workflow
 
 1. **Receive Request:**  
@@ -68,21 +70,8 @@ The backend consists of two main parts:
 
 | State         | Purpose                                   | Storage      |
 |---------------|-------------------------------------------|--------------|
-| `messages`    | Chat history                              | Client-side  |
+| `messages`    | Chat history                              | Client-side (passed to backend each time) |
 | `villainState`| Tracks current villain and defeat status  | Client-side  |
-
----
-
-## Key Functions
-
-- `getCurrentVillain(villainState)`:  
-  Returns the villain relevant to the current game state.
-
-- `defeatVillainTool(villainState)`:  
-  Provides logic for AI to determine if the villain can be defeated.
-
-- `generateText`:  
-  Integrates with Google Gemini to generate villain responses.
 
 ---
 
@@ -90,13 +79,7 @@ The backend consists of two main parts:
 
 - Next.js API Routes
 - TypeScript
-- AI SDK (Google Gemini)
-
----
-
-Certainly! Here’s a markdown section you can copy, summarizing the prompt engineering choices made in your backend, with references to the code and the study notes:
-
----
+- Google Gemini (via AI SDK)
 
 # Prompt Engineering Choices
 
@@ -111,7 +94,7 @@ Prompt engineering is central to the villain chat game’s backend, shaping how 
 - Each villain is defined in `Villain.ts` with:
   - **Name, description, and instructions**: These are concatenated to form a detailed system prompt via `toPromptString()`.
   - **Examples**: Realistic message exchanges are provided for each villain, illustrating expected dialogue and defeat logic.
-  - **Defeat State**: If a villain is marked as defeated, the prompt is dynamically altered to instruct the model to respond in a annoyed manner.
+  - **Defeat State**: If a villain is marked as defeated, the prompt is dynamically altered to instruct the model to respond in an annoyed manner.
 
 **Example (from `Villain.ts`):**
 ```typescript
@@ -147,8 +130,9 @@ This stepwise approach ensures the model maintains game structure and narrative 
 
 ## Dynamic Tool Integration
 
-- The backend (route.ts) conditionally provides the `defeatVillainTool` to the model only when the user has replied after the villain’s challenge.
-This coice was deliberate:
+- The backend (`src/api/chat/route.ts`) conditionally provides the `defeatVillainTool` to the model only when the user has replied after the villain’s challenge. 
+This choice was deliberate because:
+
     - Allowing for tool calling right from the beginning of the interaction was prone to hallucinations: the model called the tool too early because it felt defeated
     - Giving a stricter condition, like checking for a specific string like, "ti passo al collega" felt too limiting for an LLM user interaction.
 - This tool is referenced in villain instructions and examples, teaching the model when to “call” it.
