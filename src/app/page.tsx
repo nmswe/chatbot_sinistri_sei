@@ -7,6 +7,7 @@ import Intro from "./components/Intro/intro";
 import Outro from "./components/Outro/outro";
 import useChat from "./hook/useChat";
 import Image from "next/image";
+import { VillainArray } from "../../lib/Villain";
 
 export default function Home() {
   // Controls whether to show the main app after intro
@@ -67,7 +68,7 @@ export default function Home() {
     }
 
     // If all villains are defeated, show outro
-    if (villainState.defeatCounter === 6) {
+    if (villainState.defeatCounter === VillainArray.length) {
       setShowOutro(true);
     }
   }, [messages, villainState, dontRestart]);

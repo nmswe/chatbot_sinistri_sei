@@ -8,6 +8,7 @@ import { ChatBotProps, ChatMessage } from '../../types/chatTypes/chat';
 import { soundtrackMap } from '../../utils/soundTraksVillains';
 import Spiderman from './spiderman';
 import ChatMessages from './chatMessages';
+import { VillainArray } from '../../../../lib/Villain';
 
 /**
  * ChatBot component
@@ -42,7 +43,7 @@ export default function ChatBot({ onAllVillainsDefeated, onReset }: ChatBotProps
         if (!villainState || !audioUnlocked) return;
 
         // Special case: all villains defeated → stop music
-        if (villainState.defeatCounter === 6 && villainState.currentIndex === 0) {
+        if (villainState.defeatCounter === VillainArray.length && villainState.currentIndex === 0) {
             audioRef.current?.pause();
             audioRef.current = null;
             return;
@@ -70,7 +71,7 @@ export default function ChatBot({ onAllVillainsDefeated, onReset }: ChatBotProps
 
     // Trigger event when all villains are defeated
     useEffect(() => {
-        if (villainState?.defeatCounter === 6) {
+        if (villainState?.defeatCounter === VillainArray.length) {
             onAllVillainsDefeated?.();
         }
     }, [villainState?.defeatCounter, onAllVillainsDefeated]);
