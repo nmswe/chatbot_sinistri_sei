@@ -37,14 +37,6 @@
 </p>
 
 <h3 align="left">
-  🕹️ PlayGround Link
-</h3>
-
-<p>
-  You can play with the app at the following <a href="https://sinister-six.vercel.app/" target="_blank">link.</a>
-</p>
-
-<h3 align="left">
   🏯 Architecture Overview
 </h3>
 
